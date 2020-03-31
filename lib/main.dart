@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ActualTableProvider>(
-          create: (context) => ActualTableProvider(),
+          create: (context) => ActualTableProvider(), //Provider para fornecer os dados da mesa atual
         ),
       ],
       child: MaterialApp(

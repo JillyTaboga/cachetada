@@ -20,7 +20,7 @@ class _PlayerCardState extends State<PlayerCard> {
   PlayerModel player;
   List<int> tentos = [];
 
-@override
+  @override
   initState() {
     player = widget.player;
     super.initState();
@@ -29,7 +29,7 @@ class _PlayerCardState extends State<PlayerCard> {
   @override
   void didUpdateWidget(PlayerCard oldWidget) {
     setState(() {
-    player = widget.player;
+      player = widget.player;
     });
     super.didUpdateWidget(oldWidget);
   }
@@ -46,15 +46,22 @@ class _PlayerCardState extends State<PlayerCard> {
     }
     scores.add(
       player.scores.length < 1
-          ? PlayerCicle(size: size, player: player,)
+          ? PlayerCicle(
+              size: size,
+              player: player,
+            ) //Se o player não tem tento o elemento não tem o Draggable
           : Draggable<TentoCenterModel>(
               onDragCompleted: () {
                 Provider.of<ActualTableProvider>(context, listen: false)
                     .removeTentoToPlayer(player, player.scores.last);
               },
-              data: player.scores.last,
+              data: player.scores
+                  .last, //Quando ativa o drag a data que ele passa é o último Tento no score do player e esse dado é removido do player
               feedback: TentoDragImage(tento: player.scores.last),
-              child: PlayerCicle(size: size, player: player,),
+              child: PlayerCicle(
+                size: size,
+                player: player,
+              ),
             ),
     );
     return scores;
@@ -84,12 +91,14 @@ class _PlayerCardState extends State<PlayerCard> {
                 height: 20,
               ),
               InkWell(
-                onTap: (){
-                  showDialog(context: context, builder: (context){
-                    return PlayerSelect(player: player);
-                  });
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return PlayerSelect(player: player);
+                      });
                 },
-                              child: Text(
+                child: Text(
                   widget.player.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(
